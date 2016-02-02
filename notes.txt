@@ -1,0 +1,237 @@
+John Kidd - jkidd@kiddcorp.com
+----------------------------------
+
+Docker Toolbox - https://docs.docker.com/machine/reference/active/
+  Docker VM
+  Docker
+
+https://drive.google.com/folderview?id=0B8Uq6XV4-u6sc29SZTk3M2I2MkE&usp=sharing
+http://tinyurl.com/jgzd63a
+
+------------------------
+
+Containerization
+  Isolation
+  Very Lightweight as compare to VM
+
+Layering Sysytem
+  OS
+  Libraries
+
+  Images (Jenkis create images and put it in repo) & Containers (user gets the image and run in the container)
+
+  Container is an instance of Image
+
+  AUFS - Union FIle System
+
+  run <image1>
+    try to find local
+    gets it from Docker Hub
+    run it inside a containcer C1
+  run <image1>
+    already C1 running
+    image exists locally
+    run new container c2
+
+Docker Toolbox
+  Docker Machine - runs vm
+  docker-machine - Create and manage machines running Docker.
+    create virtual machine - default
+
+  docker-machine ls - list all virtual machines
+  docker-machine version
+  docker-machine url default - tcp://192.168.99.100:2376
+  docker-machine inspect default
+  docker-machine env default
+  docker-machine create -d virtualbox fdocker --- create new virtual machine fdocker
+  docker-machine ssh fdocker - connect to fdocker vm
+
+  once inside the docker vm
+    docker info
+    docker ps - all running containers
+    docker ps -a - all running & stopped containers
+    docker images - all images
+
+  running containers
+
+    docker run -i -t ubuntu /bin/bash
+      lsb_release -a
+      apt_get
+      exit
+    docker run -i -t centOS /bin/bash
+      yum
+      exit
+
+  docker ps -a - tells all running/closed containers
+    because containers were not daimeers - running bash
+
+  docker start container-name ******* docker start tender_galileo
+    its not a daemon - starts a shell waitting for connect
+
+  docker attach container-name  ******* docker attach tender_galileo
+    vim **** not there
+    yum install vim
+
+  docker run --name daemon_bmalik -d ubuntu /bin/sh -c "while true; do echo  hello world; sleep 1; done" (-d makes it daemon)
+    created a container with running script
+
+  docker logs daemon_bmalik ******* logs that particular container
+
+  docker rmi [image-name] ---- remove image
+
+  docker exec -d daemon_bmalik touch /etc/new_conf_file ***** running commonad while not in container
+
+  docker run --restart=on-failure:5 --name daemon_2 -d centos /bin/sh -c "while true; do echo hello; sleep 2; done"
+
+  docker search angular -- searches
+    hub.docker.com
+
+  docker pull mysql (pull mysql image)
+
+  docker inspect daemon_2
+
+  docker inspect --format='{{ .State.Running}}' daemon_2 ------ only intructed in particular info
+
+  docker kill 7a75867ee56d
+
+  docker rm tender_galileo
+
+  docker rm `docker ps -a -q` --- titled sign - remove all containers
+
+  docker run -i -t -d ubuntu /bin/bash
+
+--------------------- Building Image
+
+  ********** docker commit cent_john jk_emacs (create an image out of cent_john container)
+
+  docker run --name daemon_bmalik -d -i -t centos /bin/bash
+  docker commit daemon_bmalik d_bm_1
+  docker run --name daemon_bmalik_1 -d -i -t d_bm_1 /bin/bash
+
+  docker@fdocker:/$ sudo mkdir static_web
+  docker@fdocker:/$ cd static_web/
+  docker@fdocker:/static_web$ touch Dockerfile
+
+    # Version: 0.0.1
+    From ubuntu:14.04
+    MAINTAINER Buland Malik "buland-malik@intuit.com"
+    RUN apt-get update && apt-get install -y nginx
+    RUN echo "Hi, Welcome to your container" > /usr/share/nginx/html/index.html
+    EXPOSE 80
+
+  sudo docker build -t="bmalik-ubuntu" .
+
+  docker run -d -p 80 --name static_web bmalik_ubuntu nginx -g "daemon off;"
+
+  curl http://localhost:32768 (port)
+
+  docker run -d -p 80:80 --name static_web bmalik_ubuntu nginx -g "daemon off;"
+
+  # Version: 0.0.1
+  From ubuntu:14.04
+  MAINTAINER Buland Malik "buland-malik@intuit.com"
+  RUN apt-get update && apt-get install -y nginx
+  RUN echo "Hi, Welcome to your container" > /usr/share/nginx/html/index.html
+  EXPOSE 80
+  ["/usr/sbin/nginx","-g","daemon off;"] --- starting nginx
+
+  sudo docker build -t="bmalik-ubuntu-1" . ---- very very fast
+    (docker look where the chnages made in the file and execute from that point onwards)
+
+  docker run -d -p 80:80 --name daemon_bmalik_u_1 bmalik-ubuntu-1
+
+  curl http://localhost
+
+
+****** Container Running & serving contents from location not in server
+
+  # Version: 0.0.1
+  From ubuntu:14.04
+  MAINTAINER Buland Malik "buland-malik@intuit.com"
+  RUN apt-get update && apt-get install -y nginx
+  #RUN echo "Hi, Welcome to your container" > /usr/share/nginx/html/index.html
+  EXPOSE 80
+  ["/usr/sbin/nginx","-g","daemon off;"] --- starting nginx
+
+  mkdir content
+
+  volume mapping (-v)
+  docker run -d -p 80;80 --name web -v $PWD/content:/usr/share/nginx/html:ro bmalik-web
+    (creating a volume on container html folder with our content folder)
+
+---------------------
+
+  docker run -v /dbdata -t -i --name dbdata ubuntu /bin/bash
+  touch /dbdata/data.ex -- inside the container
+
+  --volum-from
+
+  docker exec -t -i container-name /bin/bash
+
+--------------------- docker compose
+Req
+  Flask
+  Redis
+
+cd /usr/local/bin
+sudo wget --no-check-certificate https://github.com/docker/compose/releases/download/1.4.1/docker-compose-`uname -s`-`uname -m`
+  gets the docker composer
+
+sudo mv docker-compose-linux-x86_64
+
+sudo chmod +x docker-compose
+
+./docker-compose --version
+
+touch Dockerfile
+
+-----app.py
+
+from flask import Flask
+from redis import Redis
+
+import os
+
+app=Flask(__name__)
+redis=Redis(host="redis", port=6379)
+
+
+@app.route('/')
+def hello():
+  redis.incr('hits')
+  return 'Hello Docker! Been hit {0} times'.format(redis.get('hits'))
+
+if __name__ == "__main__":
+  app.run(host="0.0.0.0",debug=True)
+
+-------------
+
+docker-compose.yml
+  web:
+    image: bmalik-web
+    command: python app.py
+    ports:
+      - "5000:5000"
+    volumes:
+      - .:/composeapp
+    links:
+      - redis
+  redis:
+    image: redis
+
+  sudo docker-compoer up ***************
+
+
+  each service in yamnl is a container
+
+  sudo docker-compose stop (stoping all services together)
+
+  sudo docker-compose start
+
+---------------------
+
+********** port mapping --- doicker ps -l
+
+
+--------------------- supervisord
+multiple processes
