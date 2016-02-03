@@ -5,9 +5,7 @@ Docker Toolbox - https://docs.docker.com/machine/reference/active/
   Docker VM
   Docker
 
-https://drive.google.com/folderview?id=0B8Uq6XV4-u6sc29SZTk3M2I2MkE&usp=sharing
-http://tinyurl.com/jgzd63a
-
+https://docs.docker.com/v1.8/
 ------------------------
 
 Containerization
