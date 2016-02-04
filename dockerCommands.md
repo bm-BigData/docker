@@ -1,6 +1,8 @@
 ##Commands
 1. docker-machine ls
 2. docker-machine active -- shows which vm is active
+3. docker-machine start fdocker ---running fdocker docker vm
+4. docker-machine env fdocker
 3. docker pull ubuntu:latest --lets download an image from the public registry 
 4. docker images --list of images
 5. docker run --rm -ti ubuntu /bin/bash --create a container from that image
