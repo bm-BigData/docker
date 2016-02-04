@@ -28,3 +28,5 @@ Let use an example, you could download an image of ubuntu (there is a public rep
 Containers, like VMs, are isolated (with one little caveat that I’ll discuss later). They also have an unique ID and a unique human-readable name. It’s necessary for containers to expose services, so Docker allows you to expose specific ports of a container.
 
 ![alt tag](https://github.com/bm-BigData/docker/blob/master/images/containers-2.png)
+
+Containers have one big difference that separate them from VMs, they are designed to run a single process, they don’t simulate well a complete environment. 
