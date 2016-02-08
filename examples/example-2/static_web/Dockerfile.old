@@ -1,0 +1,6 @@
+# Version: 0.0.1
+From ubuntu:14.04
+MAINTAINER Buland Malik "bulandaltaf@gamil:.com"
+RUN apt-get update && apt-get install -y nginx
+RUN echo "Hi, Welcome to your container" > /usr/share/nginx/html/index.html
+EXPOSE 80
