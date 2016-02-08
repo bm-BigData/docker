@@ -1,5 +1,7 @@
 ##Commands
 1. docker-machne ls
+2. docker-machine create -d virtualbox fdocker --- create new virtual machine fdocker
+3. docker-machine ssh fdocker - connect to fdocker vm
 2. docker-machine env [VM-MACHINE-NAME]
 3. docker-machine start/stop [VM-MACHINE-NAME]
 4. docker run hello-world --Depending on how it was built, an image might run a simple, single command and then exit.
@@ -8,6 +10,7 @@
 7. docker images --The command lists all the images on your local system
 8. docker run docker/whalesay cowsay boo-boo
 9. docker run docker/whalesay cowsay boo-boo-boo-boo-boo
+10. docker run -i -t -d ubuntu /bin/bash --running as daemon
 10. <b>Creating Builds</b>
   1. touch Dockerfile -- refers to the docker file in /examples/example-1/mydockerbuild
     1. FROM docker/whalesay:latest ---The FROM keyword tells Docker which image your image is based on. You are basing your new work on the existing whalesay image.
