@@ -14,6 +14,7 @@
     2. RUN apt-get -y upgrade & apt-get install -y fortunes ---- The fortunes program has a command that prints out wise sayings for our whale to say. So, the first step is to install it. This line adds the fortune program using the apt-get program
     3. CMD /usr/games/fortune -a | cowsay --- This line tells the fortune program to send its nifty quotes to the cowsay program.
   2. docker build -t docker-whale . ---- build the new image
+  3. docker images -- list all images and you should see docker-whale
   
 11. 
 
