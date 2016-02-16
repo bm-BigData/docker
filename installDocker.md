@@ -13,4 +13,4 @@
 3. https://www.youtube.com/watch?v=Q5POuMHxW-0
 4. https://www.youtube.com/watch?v=VeiUjkiqo9E
 5. https://www.brighttalk.com/webcast/286/160339?autoclick=true&utm_source=brighttalk-recommend&utm_campaign=followup&utm_medium=email&utm_content=organic
-6. 
+6. http://eddumelendez.github.io/blog/2015/08/19/dockerizing-mule-esb/
